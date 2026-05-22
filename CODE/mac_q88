@@ -1,0 +1,22 @@
+module mac_q88 (
+    input clk,
+    input rst_n,
+    input en,       
+    input clr,      
+    input signed [15:0] x, 
+    input signed [15:0] w, 
+    output reg signed [15:0] out_mac 
+);
+    wire signed [31:0] product = x * w;
+    wire signed [15:0] truncated_product = product[23:8];
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            out_mac <= 16'sd0;
+        end else if (clr) begin
+            out_mac <= 16'sd0; 
+        end else if (en) begin
+            out_mac <= out_mac + truncated_product; 
+        end
+    end
+endmodule
